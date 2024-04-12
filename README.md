@@ -33,7 +33,7 @@ What is slippage in AMM, and how does Uniswap V2 address this issue? Please illu
 Please examine the mint function in the UniswapV2Pair contract. Upon initial liquidity minting, a minimum liquidity is subtracted. What is the rationale behind this design?
 
 > Solution
-The rationale behind this design is to prevent providing insufficient liquidity, ensuring the stability and efficiency of the liquidity pool.
+* The rationale behind this design is to prevent providing insufficient liquidity, ensuring the stability and efficiency of the liquidity pool.
 
 ## Problem 4
 Investigate the minting function in the UniswapV2Pair contract. When depositing tokens (not for the first time), liquidity can only be obtained using a specific formula. What is the intention behind this?
