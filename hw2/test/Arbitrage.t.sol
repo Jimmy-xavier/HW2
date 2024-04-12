@@ -76,14 +76,44 @@ contract Arbitrage is Test {
         uint256 tokensBefore = tokenB.balanceOf(arbitrager);
         console.log("Before Arbitrage tokenB Balance: %s", tokensBefore);
         tokenB.approve(address(router), 5 ether);
-        /**
-         * Please add your solution below
-         */
-        /**
-         * Please add your solution above
-         */
+        
+        // 定義代幣交換路徑
+        address[] memory path = new address[](5);
+        path[0] = address(tokenB);
+        path[1] = address(tokenA);
+        path[2] = address(tokenE);
+        path[3] = address(tokenD);
+        path[4] = address(tokenC);
+
+        // 執行交換
+        router.swapExactTokensForTokens(
+            5 ether, // 用於交換的tokenB的數量
+            0,       // 接受的最小數量的tokenB，設為0表示接受任何數量的輸出
+            path,    // 交換路徑
+            arbitrager,  // 最終接收代幣的地址
+            block.timestamp + 120 // 交易截止時間
+        );
+
+        // 最後，交換回tokenB
+        address[] memory pathBack = new address[](2);
+        pathBack[0] = address(tokenC);
+        pathBack[1] = address(tokenB);
+
+        uint256 tokenCAmount = tokenC.balanceOf(arbitrager);
+        tokenC.approve(address(router), tokenCAmount);
+        router.swapExactTokensForTokens(
+            tokenCAmount,
+            0,       // 接受的最小數量的tokenB，設為0表示接受任何數量的輸出
+            pathBack,
+            arbitrager,
+            block.timestamp + 120 // 交易截止時間
+        );
+
+
         uint256 tokensAfter = tokenB.balanceOf(arbitrager);
         assertGt(tokensAfter, 20 ether);
         console.log("After Arbitrage tokenB Balance: %s", tokensAfter);
+
+        vm.stopPrank();
     }
 }
